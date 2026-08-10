@@ -1,0 +1,131 @@
+{
+  "info": {
+    "name": "Eventos API - Clase 1 (95270)",
+    "_postman_id": "eventos-clase1-95270",
+    "description": "Colección de endpoints del proyecto base de la comisión 95270 (Backend II). Requiere el servidor corriendo en localhost con el PORT definido en .env.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "user_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "event_id",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Verificar estado del servidor",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/health",
+            "description": "Devuelve un estado simple para confirmar que el servidor está activo."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Obtener todos los usuarios",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/users",
+            "description": "Devuelve el listado de usuarios registrados."
+          }
+        },
+        {
+          "name": "Crear usuario",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/users",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Ana\",\n  \"last_name\": \"Pérez\"\n}"
+            },
+            "description": "Crea un usuario. El modelo todavía no incluye email/password/role — se incorporan en los próximos módulos."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Events",
+      "item": [
+        {
+          "name": "Obtener todos los eventos",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/events",
+            "description": "Devuelve el listado de eventos registrados."
+          }
+        },
+        {
+          "name": "Crear evento",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/events",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Charla de Node.js\",\n  \"description\": \"Introducción a Backend con Node y Express\"\n}"
+            },
+            "description": "Crea un evento. Campos como fecha, cupo o categoría se incorporan más adelante en el curso."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sessions",
+      "item": [
+        {
+          "name": "Login (pendiente - se implementa en Clase 3)",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/sessions/login",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"ana@email.com\",\n  \"password\": \"123456\"\n}"
+            },
+            "description": "Ruta preparada en Clase 1 (sin lógica de auth todavía). El login con JWT se implementa en Clase 3."
+          }
+        },
+        {
+          "name": "Registro (pendiente - se implementa en Clase 2)",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/sessions/register",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Ana\",\n  \"last_name\": \"Pérez\",\n  \"email\": \"ana@email.com\",\n  \"password\": \"123456\"\n}"
+            },
+            "description": "Ruta preparada en Clase 1 (sin lógica todavía). El registro con hash de contraseña se implementa en Clase 2."
+          }
+        }
+      ]
+    }
+  ]
+}
