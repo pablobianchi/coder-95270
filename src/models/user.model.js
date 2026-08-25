@@ -10,7 +10,24 @@ const userSchema = new Schema({
         type: String,
         required: [true, 'El Apellido del Usuario es obligatorio.'],
         trim: true,
-    }},
+    },
+    email: {
+        type: String,
+        required: [true, 'El email es obligatorio.'],
+        unique: true,
+        lowercase: true,
+        trim: true,
+    },
+    password: {
+        type: String,
+        required: [true, 'La contraseña es obligatoria.'],
+    },
+    role: {
+        type: String,
+        enum: ['admin', 'organizer', 'user'],
+        default: 'user',
+    },
+    },
     { 
     timestamps: true 
 });
