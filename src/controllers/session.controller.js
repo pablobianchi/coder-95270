@@ -1,6 +1,7 @@
 import { UserModel } from '../models/user.model.js'
-import { createHash } from '../utils/password.utils.js';
-import { getUserByEmail } from '../services/user.service.js';
+import { createHash, isValidPassword } from '../utils/password.utils.js'
+import { getUserByEmail } from '../services/user.service.js'
+import jwt from 'jsonwebtoken'
 
 
 /**
@@ -51,4 +52,93 @@ export const register = async (req, res) => {
     catch (error) { 
         //console.log( error )
         res.status(500).json({ status: 'Error' , message:error.toString() }) }
+}
+
+/**
+ * 
+ * @param {import('express').Request} req 
+ * @param {*} res 
+ */
+export const current = async( req, res ) => {
+
+    try{
+        
+        return res.status( 200 ).json({ payload:req.user } );
+    }
+    catch( error ) {
+        return res.status( 401 ).json({
+            status: 'error',
+            message: 'No autenticado'
+        });
+    }
+}
+
+
+/**
+ * 
+ * @param {import('express').Request} req 
+ * @param {import('express').Response} res 
+ * @returns 
+ */
+export const login = async (req, res) => {
+    try {
+        const { email, password } = req.body
+
+        if (!email || !password) {
+            return res.status(400).json({
+                status: 'error',
+                message: 'Email y contraseña son obligatorios'
+            })
+        }
+
+        const normalizedEmail = email.toLowerCase().trim()
+
+        const user = await getUserByEmail(normalizedEmail)
+
+        if (!user) {
+            // Mensaje genérico a propósito: no distinguimos "email no existe"
+            // de "contraseña incorrecta" para no facilitar user enumeration.
+            return res.status(401).json({
+                status: 'error',
+                message: 'Credenciales inválidas'
+            })
+        }
+
+        const validPassword = await isValidPassword(password, user.password)
+
+        if (!validPassword) {
+            return res.status(401).json({
+                status: 'error',
+                message: 'Credenciales inválidas'
+            })
+        }      
+
+        const tokenUser = {
+            id: user._id,
+            email: user.email,
+            role: user.role
+        }
+
+        const jwtToken = jwt.sign( tokenUser,'1234',{expiresIn:60})
+
+        res.cookie('currentUser', jwtToken , {
+            httpOnly:true,
+            maxAge: 60 * 1000,
+            sameSite:'lax',
+            secure:false
+        })
+
+        
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Login correcto',
+            jwt: jwtToken
+        })
+    } catch {
+        res.status(500).json({
+            status: 'error',
+            message: 'Error interno del servidor'
+        })
+    }
 }
