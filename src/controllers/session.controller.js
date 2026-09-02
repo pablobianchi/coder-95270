@@ -134,3 +134,20 @@ export const login = async (req, res) => {
         })
     }
 }
+
+
+/**
+ * Logout — POST /api/sessions/logout
+ * Elimina la cookie 'currentUser'. El JWT en sí no se invalida (es stateless);
+ * dejar de enviarlo alcanza porque el cliente ya no lo tiene disponible.
+ * @param {import("express").Request} req
+ * @param {import("express").Response} res
+ */
+export const logout = (req, res) => {
+    res.clearCookie('currentUser')
+
+    res.status(200).json({
+        status: 'success',
+        message: 'Logout correcto'
+    })
+}
