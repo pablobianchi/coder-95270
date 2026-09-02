@@ -1,7 +1,7 @@
 import { UserModel } from '../models/user.model.js'
 import { createHash, isValidPassword } from '../utils/password.utils.js'
 import { getUserByEmail } from '../services/user.service.js'
-import jwt from 'jsonwebtoken'
+import { generateToken } from '../utils/jwt.utils.js'
 
 
 /**
@@ -119,7 +119,7 @@ export const login = async (req, res) => {
             role: user.role
         }
 
-        const jwtToken = jwt.sign( tokenUser,'1234',{expiresIn:60})
+        const jwtToken = generateToken( tokenUser )
 
         res.cookie('currentUser', jwtToken , {
             httpOnly:true,

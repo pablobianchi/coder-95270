@@ -1,4 +1,5 @@
-import jwt from 'jsonwebtoken'
+import { verifyToken } from '../utils/jwt.utils.js';
+
 /**
  * 
  * @param {import('express').Request} req 
@@ -12,11 +13,11 @@ export const authMiddleware = async( req, res, next ) => {
         if( !token ){
             return res.status(401).json({
                 status: 'error',
-                message: 'No autenticado - MIDDLEWARE - TOKEN'
+                message: 'No autenticado'
             })
         }
 
-        const payload = jwt.verify( token, '1234' );
+        const payload = verifyToken( token );
 
         req.user = payload;
 
@@ -25,7 +26,7 @@ export const authMiddleware = async( req, res, next ) => {
     catch( error ) {
         return res.status( 401 ).json({
             status: 'error',
-            message: 'No autenticado - MIDDLEWARE',
+            message: 'No autenticado',
             data: error.toString()
         });
     }
