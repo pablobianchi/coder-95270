@@ -125,7 +125,8 @@ export const login = async (req, res) => {
             httpOnly:true,
             maxAge: 60 * 1000,
             sameSite:'lax',
-            secure:false
+            secure:false,
+            signed:true
         })
 
         
@@ -135,10 +136,10 @@ export const login = async (req, res) => {
             message: 'Login correcto',
             jwt: jwtToken
         })
-    } catch {
+    } catch( error ) {
         res.status(500).json({
             status: 'error',
-            message: 'Error interno del servidor'
+            message: 'Error interno del servidor' + error.toString()
         })
     }
 }
