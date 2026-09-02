@@ -1,6 +1,6 @@
 import { UserModel } from '../models/user.model.js'
-import { createHash, isValidPassword } from '../utils/password.utils.js'
-import { getUserByEmail } from '../services/user.service.js'
+import { createHash } from '../utils/password.utils.js'
+import { getUserByEmail, validateLogin } from '../services/user.service.js'
 import { generateToken } from '../utils/jwt.utils.js'
 
 
@@ -93,7 +93,7 @@ export const login = async (req, res) => {
 
         const normalizedEmail = email.toLowerCase().trim()
 
-        const user = await getUserByEmail(normalizedEmail)
+        const user = await validateLogin(normalizedEmail, password )
 
         if (!user) {
             // Mensaje genérico a propósito: no distinguimos "email no existe"
@@ -103,15 +103,6 @@ export const login = async (req, res) => {
                 message: 'Credenciales inválidas'
             })
         }
-
-        const validPassword = await isValidPassword(password, user.password)
-
-        if (!validPassword) {
-            return res.status(401).json({
-                status: 'error',
-                message: 'Credenciales inválidas'
-            })
-        }      
 
         const tokenUser = {
             id: user._id,

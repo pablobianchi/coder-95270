@@ -1,10 +1,9 @@
 import { UserModel } from "../models/user.model.js"
+import { isValidPassword } from "../utils/password.utils.js"
 
 
 
 /**
- * Hola, soy una documentacion
- * @tutorial rwerw
  * 
  * @description busca un usuario x mail
  * @param {*} email 
@@ -12,4 +11,32 @@ import { UserModel } from "../models/user.model.js"
  */
 export const getUserByEmail = async email => {
     return await UserModel.findOne({ email })
+}
+
+
+/**
+ * @description Verifica el Login de un Usuario
+ * @param {*} email 
+ * @param {*} passowrd 
+ * @returns 
+ */
+export const validateLogin = async( email, password ) => {
+    
+    const user = await getUserByEmail(email)
+
+    if (!user) {
+        return null;
+    }
+
+    const validPassword = await isValidPassword(password, user.password)
+
+    if (!validPassword) {
+        return null;
+    }    
+
+    return({
+        id: user._id,
+        email: user.email,
+        role: user.role
+    })
 }
