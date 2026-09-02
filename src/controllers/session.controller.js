@@ -3,6 +3,8 @@ import { createHash } from '../utils/password.utils.js'
 import { getUserByEmail, validateLogin } from '../services/user.service.js'
 import { generateToken } from '../utils/jwt.utils.js'
 
+import { env } from '../config/env.js'
+
 
 /**
  * 
@@ -116,7 +118,7 @@ export const login = async (req, res) => {
             httpOnly:true,
             maxAge: 60 * 1000,
             sameSite:'lax',
-            secure:false,
+            secure: env.NODE_ENV === 'production',
             signed:true
         })
 
