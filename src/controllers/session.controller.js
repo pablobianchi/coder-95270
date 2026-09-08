@@ -1,6 +1,6 @@
 import { UserModel } from '../models/user.model.js'
 import { createHash } from '../utils/password.utils.js'
-import { getUserByEmail, validateLogin } from '../services/user.service.js'
+import { getUserByEmail } from '../services/user.service.js'
 import { generateToken } from '../utils/jwt.utils.js'
 
 import { env } from '../config/env.js'
@@ -64,8 +64,8 @@ export const register = async (req, res) => {
 export const current = async( req, res ) => {
 
     try{
-        
-        return res.status( 200 ).json({ payload:req.user } );
+        //TODO: crear userDto <--- ver la clase que viene.
+        return res.status( 200 ).json({ data:req.user } );
     }
     catch( error ) {
         return res.status( 401 ).json({
@@ -84,32 +84,11 @@ export const current = async( req, res ) => {
  */
 export const login = async (req, res) => {
     try {
-        const { email, password } = req.body
-
-        if (!email || !password) {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Email y contraseña son obligatorios'
-            })
-        }
-
-        const normalizedEmail = email.toLowerCase().trim()
-
-        const user = await validateLogin(normalizedEmail, password )
-
-        if (!user) {
-            // Mensaje genérico a propósito: no distinguimos "email no existe"
-            // de "contraseña incorrecta" para no facilitar user enumeration.
-            return res.status(401).json({
-                status: 'error',
-                message: 'Credenciales inválidas'
-            })
-        }
 
         const tokenUser = {
-            id: user._id,
-            email: user.email,
-            role: user.role
+            id: req.user.id,
+            email: req.user.email,
+            role: req.user.role
         }
 
         const jwtToken = generateToken( tokenUser )
@@ -122,12 +101,10 @@ export const login = async (req, res) => {
             signed:true
         })
 
-        
-
         res.status(200).json({
             status: 'success',
             message: 'Login correcto',
-            jwt: jwtToken
+            user: req.user
         })
     } catch( error ) {
         res.status(500).json({
