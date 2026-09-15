@@ -10,6 +10,11 @@ const eventSchema = new Schema({
         type: String,
         required: [true, 'La descripción es obligatoria.'],
         trim: true,
+    },
+    organizer:{
+        type: Schema.Types.ObjectId,
+        ref: 'users',
+        required:[true, 'El Organizer es obligatorio'],
     }},
     {
         timestamps: true

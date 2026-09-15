@@ -45,10 +45,11 @@ passport.use('register', new LocalStrategy(
 passport.use('login', new LocalStrategy( 
     {   usernameField:'email', 
         passwordField:'password' , 
+        passReqToCallback:true,
         session:false  
     },
 
-    async ( email, password, done) =>{
+    async ( req , email, password, done) =>{
 
         try{
             
@@ -59,7 +60,8 @@ passport.use('login', new LocalStrategy(
             if (!user) {
                 return done( null , false , {
                     status: 'error',
-                    message: 'Credenciales inválidas'
+                    message: 'Credenciales inválidas',
+                    code: 401
                 })
             }
        
