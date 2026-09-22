@@ -1,13 +1,9 @@
-import { EventModel } from "../models/event.model.js";
+import { createEventRepository, getEventByIdRepository, findEventsRepository } from "../repositories/event.repository.js";
 
 export const createEventService = async( title, description, organizer ) => {
 
     try{  
-        const newEvent = await EventModel.create({
-            title: title,
-            description: description,
-            organizer:organizer
-        });
+        const newEvent = createEventRepository(title,description,organizer);
 
         return newEvent
 
@@ -18,12 +14,26 @@ export const createEventService = async( title, description, organizer ) => {
 
 }
 
-export const getEventById = async( eventId ) => {
+export const getEventByIdService = async( eventId ) => {
 
     try{
-        const event = await EventModel.findById( eventId )
+        const event = await getEventByIdRepository( eventId )
 
         return event
+    }
+    catch( error ){
+        throw error
+    }
+
+}
+
+
+export const findEventsService = async(  ) => {
+
+    try{
+        const lEvents = await findEventsRepository( '', '', 0, 0 )
+
+        return lEvents
     }
     catch( error ){
         throw error
