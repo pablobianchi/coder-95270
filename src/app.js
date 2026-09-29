@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser'
 import userRoutes from './routes/user.routes.js'
 import eventRoutes from './routes/event.routes.js'
 import sessionRoutes from './routes/session.routes.js'
+import ticketRoutes from './routes/ticket.routes.js'
 
 import './config/passport.js'
 
@@ -22,6 +23,7 @@ app.use( passport.initialize())
 app.use('/api/users', userRoutes)
 app.use('/api/events', eventRoutes)
 app.use('/api/sessions', sessionRoutes)
+app.use('/api/tickets', ticketRoutes)
 
 app.get('/api/health', (req, res)=>{
 

@@ -8,7 +8,7 @@ export const transporter = nodemailer.createTransport({
   port: env.SMTP_PORT,
   secure: false, // use STARTTLS (upgrade connection to TLS after connecting)
   auth: {
-    user: "ABC"+env.SMTP_USER,
+    user: env.SMTP_USER,
     pass: env.SMTP_PASSWORD
   },
 });
