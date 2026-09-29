@@ -1,4 +1,6 @@
 import { createEventRepository, getEventByIdRepository, findEventsRepository } from "../repositories/event.repository.js";
+import { enviarMail } from "./mail.service.js";
+
 
 export const createEventService = async( title, description, organizer ) => {
 
@@ -18,6 +20,8 @@ export const getEventByIdService = async( eventId ) => {
 
     try{
         const event = await getEventByIdRepository( eventId )
+
+        enviarMail( "demo@coder.com", "Mail con el Evento", "<h1>"+event.title+"</h1>" , event.title );
 
         return event
     }

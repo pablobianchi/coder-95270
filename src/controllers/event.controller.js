@@ -1,4 +1,6 @@
 import { createEventService, getEventByIdService, findEventsService } from "../services/event.service.js"
+import { transporter } from '../config/mail.js'
+
 
 
 
@@ -11,14 +13,13 @@ export const getEvents = async (req, res) => {
 }
 
 export const getEventById = async (req, res) => {  
-    try {    
-
+    try {   
         const eventId = req.params.eventId
-
-        res.status(200).json({ message:"ok", data: await getEventByIdService( eventId ) })  
+       res.status(200).json({ message:"ok", data: await getEventByIdService( eventId ) })  
     } 
     catch (error) { 
-        res.status(500).json({ error: 'Error al obtener eventos' }) }
+        console.log( error )
+        res.status(500).json({ error: 'Error al obtener eventos' , data: error.toString() }) }
 }
 
 
