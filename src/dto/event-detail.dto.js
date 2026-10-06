@@ -14,10 +14,10 @@ export class EventDetailDTO {
         */
        
         this.organizer = {}
-        this.organizer.id = event.organizer._id
+        //this.organizer.id = event.organizer._id
         this.organizer.first_name = event.organizer.first_name
         this.organizer.last_name = event.organizer.last_name
-        this.organizer.email = event.organizer.email
+       // this.organizer.email = event.organizer.email
         
     }
 }

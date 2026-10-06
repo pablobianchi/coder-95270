@@ -1,15 +1,23 @@
 import { createEventService, getEventByIdService, findEventsService } from "../services/event.service.js"
 import { transporter } from '../config/mail.js'
+import { EventDetailDTO } from "../dto/event-detail.dto.js";
 
 
 
 
-export const getEvents = async (req, res) => {  
-    try {    
-        res.status(200).json({ message:"ok", data: await findEventsService() })  
-    } 
+export const getEvents = async (req, res, next ) => {  
+   try {    
+
+        const lEvents = await findEventsService();
+        const eventsDTO = lEvents.map(event => new EventDetailDTO(event))
+
+
+        res.status(200).json({ message:"ok", data: eventsDTO })  
+   } 
     catch (error) { 
-        res.status(500).json({ error: 'Error al obtener eventos' , data: error }) }
+        next(error)
+        //res.status(500).json({ error: 'Error al obtener eventos - CATCH' , data: error }) 
+    }
 }
 
 export const getEventById = async (req, res) => {  

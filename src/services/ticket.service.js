@@ -1,6 +1,6 @@
 import { randomBytes } from 'node:crypto'
 import { createTicketRepository } from "../repositories/ticket.repository.js"
-import { getEventByIdRepository } from '../repositories/event.repository.js'
+import { eventRepository } from '../repositories/event.repository.js'
 import { enviarMail } from './mail.service.js'
 
 const generateReservationCode = () => {
@@ -16,7 +16,7 @@ export const createTicketService = async ({ eventId, quantity = 1, user }) => {
         throw new ServiceError('La cantidad debe ser un número entero mayor a cero', 400)
     }
 */
-    const event = await getEventByIdRepository(eventId)
+    const event = await eventRepository.getEventById(eventId)
 /*
     if (!event) {
         throw new ServiceError('Evento no encontrado', 404)

@@ -12,6 +12,8 @@ import passport from 'passport'
 
 import { env } from './config/env.js'
 
+import { errorHandler } from './middlewares/error.middleware.js'
+
 
 const app = express()
 
@@ -28,7 +30,6 @@ app.use('/api/tickets', ticketRoutes)
 app.get('/api/health', (req, res)=>{
 
     res.status(200).json({data:"ok"});
-
 })
 
 
@@ -37,5 +38,6 @@ app.use((req, res) => {
     res.status(404).json({ status: 'error', message: 'Ruta no encontrada' });
 });
 
+app.use( errorHandler )
 
 export default app;

@@ -1,10 +1,17 @@
+import { EventDAO } from '../dao/event.dao.js'
 import { EventDetailDTO } from "../dto/event-detail.dto.js";
-import { EventModel } from "../models/event.model.js";
 
-export const createEventRepository = async( title, description, organizer ) => {
+class EventRepository {  
+
+    constructor( dao ){
+        this.dao = dao 
+    }
+
+
+    createEvent = async( title, description, organizer ) => {
 
     try{  
-        const newEvent = await EventModel.create({
+        const newEvent = await this.dao.create({
             title: title,
             description: description,
             organizer:organizer
@@ -18,12 +25,12 @@ export const createEventRepository = async( title, description, organizer ) => {
         throw error
     }
 
-}
+    }
 
-export const getEventByIdRepository = async( eventId ) => {
+   getEventById = async( eventId ) => {
 
     try{
-        const event = await EventModel.findById( eventId )
+        const event = await this.dao.findById( eventId )
         .populate('organizer')
         
         return new EventDetailDTO( event )
@@ -32,23 +39,21 @@ export const getEventByIdRepository = async( eventId ) => {
         throw error
     }
 
-}
+    }
 
-export const findEventsRepository = async( title, sort, skip, limit ) => {
+    findEvents = async( title, sort, skip, limit ) => {
 
     //
     try{
-        const lEvents = await EventModel.find({})
-        .populate('organizer')
+        const lEvents = await this.dao.find({})
+        
         /*
         .sort(sort)
         .skip(skip)
         .limit(limit)
         */
-        
-        const eventsDTO = lEvents.map(event => new EventDetailDTO(event))
 
-        return eventsDTO
+        return lEvents
     }
     catch( error ){
 
@@ -56,4 +61,28 @@ export const findEventsRepository = async( title, sort, skip, limit ) => {
         throw error
     }
 
+    }
+
+    findAvailableEvents = async( title, sort, skip, limit ) => {
+
+        try{
+            const lEvents = await this.dao.find({status: "123"})
+            
+            /*
+            .sort(sort)
+            .skip(skip)
+            .limit(limit)
+            */
+
+            return lEvents
+        }
+        catch( error ){
+
+            console.log( error )
+            throw error
+        }
+
+    }
 }
+
+export const eventRepository = new EventRepository( new EventDAO() )
